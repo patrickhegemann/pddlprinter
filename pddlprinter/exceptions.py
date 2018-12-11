@@ -1,0 +1,2 @@
+class NotDefinedException(Exception):
+    pass
