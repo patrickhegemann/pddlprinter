@@ -7,6 +7,11 @@ class ObjectType:
         self.set_children(children)
         self.set_parent(parent)
 
+    def add_children(self, children):
+        self.children += children
+        for c in children:
+            c.set_parent(self)
+
     def set_children(self, children):
         self.children = children
         for c in children:

@@ -10,6 +10,7 @@ def foo_domain():
             (:types
                 ; comment
                 mega-bot - robot    ; another comment
+                robot
                 location
             )
             (:predicates
