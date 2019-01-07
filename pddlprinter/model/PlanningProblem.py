@@ -13,6 +13,10 @@ class PlanningProblem:
         self.init_state = InitialState()
         self.goal_state = GoalState()
 
+        # todo: make this clean ...
+        self._metric = ""
+        self.fluents = []
+
     def add_object(self, name, obj_type):
         t = self.domain.type_hierarchy.get_type_from_name(obj_type)
         if t is None:
@@ -21,7 +25,7 @@ class PlanningProblem:
         self.objects.add(o)
         return o
 
-    def add_atom_to_state(self, predicate, object_names, state):
+    def add_atom_to_state(self, predicate, object_names, state, negated=False):
         p = self.domain.get_predicate_by_name(predicate)
         if p is None:
             raise NotDefinedException("Predicate %s not defined in domain" % predicate)
@@ -47,14 +51,22 @@ class PlanningProblem:
             pddl_objects.append(o)
             counter += 1
 
-        state.add(Atom(p, pddl_objects))
+        state.add(Atom(p, pddl_objects, negated))
         return state
 
-    def init(self, predicate, *object_names):
-        self.init_state = self.add_atom_to_state(predicate, list(object_names), self.init_state)
+    def init(self, predicate, *object_names, negated=False):
+        self.init_state = self.add_atom_to_state(predicate, list(object_names), self.init_state, negated)
 
-    def goal(self, predicate, *object_names):
-        self.goal_state = self.add_atom_to_state(predicate, list(object_names), self.goal_state)
+    # todo: make this good
+    def init_fluent(self, fluent, value):
+        self.init_state.fluents.append((fluent, value))
+
+    def goal(self, predicate, *object_names, negated=False):
+        self.goal_state = self.add_atom_to_state(predicate, list(object_names), self.goal_state, negated)
+
+    # todo: make this good
+    def metric(self, opt_type, function):
+        self._metric = "\t(:metric %s (%s))\n" % (opt_type, function)
         
     def __str__(self):
         s = "(define (problem %s)\n" % self.problem_name
@@ -62,5 +74,6 @@ class PlanningProblem:
         s += str(self.objects)
         s += str(self.init_state)
         s += str(self.goal_state)
+        s += str(self._metric)      # todo
         s += ")\n"
         return s 
