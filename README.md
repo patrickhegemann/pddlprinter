@@ -1,6 +1,33 @@
 # PDDLPrinter
 
-This is a Python3 module aimed at convenient generation of problems in PDDL for Automated Planning and is currently in early development.
+This is a Python3 module aimed at convenient generation of problems in PDDL for Automated Planning and is currently in early development. It helps you by doing the grunt work such as declaring objects and generating valid PDDL, so you can focus on creating good problem instances.
+
+## Features
+
+* Parsing domain file to infer types, constants and predicates for use in problem generation
+* Initialization of predicates
+* Conjunctive goals
+* Automatic declaration of necessary objects, including simple type inference
+
+Experimental Features:
+* Specification of a metric (only a single function, not an arbitrary expression)
+* Initialization of numeric fluents
+
+Planned Features:
+* Arbitrary goals
+* Derived predicates
+* Specification of arbitrary metrics, preferences
+* Complete (automatic) type inference for objects
+* Full support of PDDL 3.1 features
+* Generation helpers (for grids, number sequences, graphs, ...)
+
+
+## Installation (pip)
+
+This module is not on the [Python Package Index](https://pypi.org) (yet), so you can clone this repository and [install it from source](https://packaging.python.org/tutorials/installing-packages/#installing-from-a-local-src-tree):
+```
+$ pip install /path/to/pddlprinter
+```
 
 ## Example
 
