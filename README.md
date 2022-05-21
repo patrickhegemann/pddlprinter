@@ -1,37 +1,40 @@
 # PDDLPrinter
 
-This is a Python3 module aimed at convenient generation of problems in PDDL for Automated Planning and is currently in early development. It helps you by doing the grunt work such as declaring objects and generating valid PDDL, so you can focus on creating good problem instances.
+PDDLPrinter is a Python module for convenient generation of planning problem instances for automated planning as PDDL, which can be used as input to any standard off-the-shelf planner. It provides a lightweight interface and makes sure to generate valid PDDL according to the given problem specification. Where possible, missing parts of the specification are automatically inferred from the domain definition and the given constraints.
 
 ## Features
 
-* Parsing domain file to infer types, constants and predicates for use in problem generation
-* Initialization of predicates
-* Conjunctive goals
-* Automatic declaration of necessary objects, including simple type inference
+* [x] Parsing PDDL domain file to infer object types, constants and predicates for use in problem generation
+* [x] Initialization of predicates
+* [x] Conjunctive goals
+* [x] Automatic declaration of the used objects
 
 Experimental Features:
-* Specification of a metric (only a single function, not an arbitrary expression)
-* Initialization of numeric fluents
+* [x] Specification of a metric in the form of a single function
+* [x] Initialization of numeric fluents
+* [x] Automatic object declaration and (partly) type inference
 
-Planned Features:
-* Arbitrary goals
-* Derived predicates
-* Specification of arbitrary metrics, preferences
-* Complete (automatic) type inference for objects
-* Full support of PDDL 3.1 features
-* Generation helpers (for grids, number sequences, graphs, ...)
+Roadmap:
+* [ ] Full support of PDDL features, such as
+	* Goals of arbitrary logical structure
+	* Derived predicates
+	* Specification of metrics with arbitrary structure
+* [ ] Fully automatic type inference for object declaration
+* [ ] Convenience functions for higher-level problem specification and automatic generation of object structures such as ordered sets, grids, graphs, ...
 
 
 ## Installation (pip)
 
-This module is not on the [Python Package Index](https://pypi.org) (yet), so you can clone this repository and [install it from source](https://packaging.python.org/tutorials/installing-packages/#installing-from-a-local-src-tree):
-```
-$ pip install /path/to/pddlprinter
+Clone this repository and [install it from source](https://packaging.python.org/tutorials/installing-packages/#installing-from-a-local-src-tree):
+```shell
+git clone https://github.com/patrickhegemann/pddlprinter.git
+cd pddlprinter
+pip install .
 ```
 
-## Example
+## Usage Example
 
-Here is an example script that generates a classic Gripper problem with 6 balls:
+Here is an example script that generates a classic "Gripper" planning problem instance with 2 rooms containing 6 balls in total.
 
 ```python
 from pddlprinter.model import PlanningProblem
@@ -50,8 +53,8 @@ problem.init("free", "gripper-left")
 problem.init("free", "gripper-right")
 # 6 balls start in room a and must get to room b
 for i in range(1, 7):
-    problem.init("at", "ball%d" % i, "rooma")
-    problem.goal("at", "ball%d" % i, "roomb")
+    problem.init("at", f"ball{i}", "rooma")
+    problem.goal("at", f"ball{i}", "roomb")
 
 # Done!
 print(problem)
@@ -88,5 +91,3 @@ Output:
 	))
 )
 ```
-
-As you can see, you don't have to manually create all the problem objects (but you still can). pddlprinter does this job for you automatically by using information given in the planning domain. pddlprinter currently doesn't support a lot of features or complete type-inference, but it is work in progress.
